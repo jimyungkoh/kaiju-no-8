@@ -3,11 +3,14 @@ package com.example.kafka
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.common.serialization.StringSerializer
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.util.Properties
 
-object KafkaProducerApp {
+object SimpleProducerSync {
+    private val logger = LoggerFactory.getLogger(SimpleProducerSync::class.java.name)
     private const val TOPIC_NAME = "simple-topic"
     private const val PROPERTIES_FILE = "local.properties"
 
@@ -26,11 +29,22 @@ object KafkaProducerApp {
         setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java.name)
     }
 
+    private fun report(metadata: RecordMetadata): String {
+        return """|##### record metadata received #####
+        |partition: ${metadata.partition()}
+        |offset: ${metadata.offset()}
+        |timestamp: ${metadata.timestamp()}
+        |""".trimMargin()
+    }
+
     fun sendMessage(message: String) {
         try {
             KafkaProducer<String, String>(createProducerConfig()).use { producer ->
                 val record = ProducerRecord<String, String>(TOPIC_NAME, message)
-                producer.send(record).get()
+                val recordMetadata = producer.send(record).get()
+
+                logger.info(report(recordMetadata))
+
                 println("Message sent successfully")
             }
         } catch (e: Exception) {
@@ -41,5 +55,5 @@ object KafkaProducerApp {
 }
 
 fun main() {
-    KafkaProducerApp.sendMessage("hello kafka!")
+    SimpleProducerSync.sendMessage("hello kafka!")
 }
