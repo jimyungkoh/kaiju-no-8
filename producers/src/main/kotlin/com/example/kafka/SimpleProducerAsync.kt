@@ -32,10 +32,10 @@ object SimpleProducerAsync {
     private fun report(metadata: RecordMetadata?, exception: Exception?): String {
         return if (exception == null && metadata != null) {
             """|##### record metadata received #####
-           |partition: ${metadata.partition()}
-           |offset: ${metadata.offset()}
-           |timestamp: ${metadata.timestamp()}
-           |""".trimMargin()
+            |partition: ${metadata.partition()}
+            |offset: ${metadata.offset()}
+            |timestamp: ${metadata.timestamp()}
+            |""".trimMargin()
         } else {
             "exception error from broker ${exception?.message}"
         }
