@@ -96,6 +96,17 @@ fun main() {
         setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getProperty("KAFKA_BOOTSTRAP_SERVERS"))
         setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java.name)
         setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer::class.java.name)
+        setProperty(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, "50000")
+        // acks setting
+        //  setProperty(ProducerConfig.ACKS_CONFIG, "0")
+        // batch size: bytes
+        //  setProperty(ProducerConfig.BATCH_SIZE_CONFIG, "32000")
+        // linger ms
+        //  setProperty(ProducerConfig.LINGER_MS_CONFIG, "5")
+        // max block ms
+        //  setProperty(ProducerConfig.MAX_BLOCK_MS_CONFIG, "60000")
+        // retries
+        //  setProperty(ProducerConfig.RETRIES_CONFIG, "3")
     }
 
     val kafkaProducer = KafkaProducer<String, String>(producerConfig)
